@@ -18,4 +18,4 @@ Title には "\[翻訳期日(省略可)\] 原文タイトル" を、Comment に�
 
 ## Translator チーム
 
-GitHub の Issues ではタグの設定や他の人のコメントの編集などを行うには権限が必要です。翻訳にご協力いただける方は Translator チームに加えて編集権限 (リポジトリの Push 権限) を付与しますので、[dynamis](http://dynamis.jp/) などにコンタクトしてください。
+GitHub の Issues では important など Labels の設定や他の人のコメントの編集などを行うには権限が必要です。翻訳にご協力いただける方は Translator チームに加えて編集権限 (リポジトリの Push 権限) を付与しますので、[dynamis](http://dynamis.jp/) などにコンタクトしてください。
