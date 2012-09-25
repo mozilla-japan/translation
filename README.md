@@ -24,5 +24,5 @@ GitHub の Issues では important など Labels の設定や他の人のコメ�
 
 何かあればフォーラムや Google Groups で聞いてください。
 
-Mozilla 翻訳フォーラム: http://forums.firehacks.org/trans/
-Google Groups: http://groups.google.com/group/mozilla-translations-ja
+* Mozilla 翻訳フォーラム: http://forums.firehacks.org/trans/
+* Google Groups: http://groups.google.com/group/mozilla-translations-ja
