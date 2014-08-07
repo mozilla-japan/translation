@@ -15,6 +15,14 @@ Title には "\[翻訳期日(省略可)\] 原文タイトル" を、Comment に�
 翻訳が完了したらまた Issue に翻訳したテキストを公開している URL を書き込むか、翻訳結果を直接コメント欄に書き込むなどしてください。  
 新しい翻訳リクエスト (Issue) が登録されたときに通知を受けるには、このリポジトリ全体を Watch してください。Watch の有効化と解除 (Unwatch) はログインしてからページ上部のボタンで設定できます。
 
+## 翻訳ステータス
+
+サポートサイト Mozilla Support (SUMO) のドキュメント翻訳状況は次のページで確認できます:
+* https://support.mozilla.org/ja/localization
+
+開発者向けドキュメントサイト Mozilla Developer Network (MDN) のドキュメント翻訳状況は次のページで確認できます:
+* https://developer.mozilla.org/ja/docs/MDN/Doc_status/Overview
+
 ## Translator チーム
 
 GitHub の Issues では important など Labels の設定や他の人のコメントの編集などを行うには権限が必要です。翻訳にご協力いただける方は Translator チームに加えて編集権限 (リポジトリの Push 権限) を付与しますので、[dynamis](http://dynamis.jp/) などにコンタクトしてください。
