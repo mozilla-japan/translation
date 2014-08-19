@@ -3,34 +3,6 @@ translation
 
 Mozilla 関連のドキュメント翻訳リクエストとステータス管理に使うレポジトリです。
 
-## 翻訳のリクエスト
+翻訳リクエストには [Issues](https://github.com/mozilla-japan/translation/issues) を、メモや情報共有にはこの Wiki を、質問や議論は [Mozilla 翻訳フォーラム](http://forums.firehacks.org/trans/) や [Google Groups](http://groups.google.com/group/mozilla-translations-ja) をご利用ください。
 
-Mozilla や Web 技術関連で翻訳して欲しいドキュメントのある方は [Issues に新規登録](https://github.com/mozilla-japan/translation/issues/new) してください。
-Title には "\[翻訳期日(省略可)\] 原文タイトル" を、Comment には対象ページの URL など訳者にお願いしたいことを自由に書いてください。
-
-
-## 翻訳ボランティア
-
-翻訳にご協力いただける方は、[未完了の Issues リスト](https://github.com/mozilla-japan/translation/issues?state=open) を確認し、翻訳してみようと思うページがあったらその Issue に翻訳開始しますとコメントを残して翻訳作業を始めてください。  
-翻訳が完了したらまた Issue に翻訳したテキストを公開している URL を書き込むか、翻訳結果を直接コメント欄に書き込むなどしてください。  
-新しい翻訳リクエスト (Issue) が登録されたときに通知を受けるには、このリポジトリ全体を Watch してください。Watch の有効化と解除 (Unwatch) はログインしてからページ上部のボタンで設定できます。
-
-## 翻訳ステータス
-
-サポートサイト Mozilla Support (SUMO) のドキュメント翻訳状況は次のページで確認できます:
-* https://support.mozilla.org/ja/localization
-
-開発者向けドキュメントサイト Mozilla Developer Network (MDN) のドキュメント翻訳状況は次のページで確認できます:
-* https://developer.mozilla.org/ja/docs/MDN/Doc_status/Overview
-
-## Translator チーム
-
-GitHub の Issues では important など Labels の設定や他の人のコメントの編集などを行うには権限が必要です。翻訳にご協力いただける方は Translator チームに加えて編集権限 (リポジトリの Push 権限) を付与しますので、[dynamis](http://dynamis.jp/) などにコンタクトしてください。
-
-
-## 何かあれば
-
-何かあればフォーラムや Google Groups で聞いてください。
-
-* Mozilla 翻訳フォーラム: http://forums.firehacks.org/trans/
-* Google Groups: http://groups.google.com/group/mozilla-translations-ja
+[詳しくは Wiki をご覧ください](https://github.com/mozilla-japan/translation/wiki)
