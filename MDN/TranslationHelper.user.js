@@ -3,7 +3,7 @@
 // @description MDNで翻訳を行う際に自動で色々します。
 // @namespace   https://github.com/mozilla-japan/translation/
 // @author      unarist
-// @version     0.2
+// @version     0.3
 // @downloadURL https://raw.githubusercontent.com/mozilla-japan/translation/master/MDN/TranslationHelper.user.js
 // @supportURL  https://github.com/mozilla-japan/translation/issues
 // @match       https://developer.mozilla.org/*/docs/*
@@ -12,12 +12,24 @@
 // TODO: 適用する処理を選べるように？
 // TODO: 事前or事後の確認（diffを出せるとgood）
 // TODO: 自動翻訳の充実
-// TODO: 追加翻訳時にも適用できる処理がないか
 // TODO: ja以外の翻訳で起動しないように
 // TODO: WISYWIGエディタを使う以上マークアップに細かいブレがあってパターンに合わないことがある
+// TODO: 読みやすいように、全体の流れを先に持ってきたい（多分移動するだけ）
+// TODO: BodyProcessorのメソッドを舐めて、処理の選択肢を提示したい
+
+/** changelog **
+
+0.3 (2017/02/25)
+ addNameAttribute id属性が翻訳済みの場合はスキップ
+ syncTags 既存のタグを全て削除するように（主に手動実行用）
+ 各種手動実行リンクを追加
+
+*/
 
 (function() {
     'use strict';
+
+    if (!document.getElementById('localize-document')) return;
 
     class BodyProcessor {
         constructor() {
@@ -29,13 +41,35 @@
         save() {
             this.editor.setData(this.work_str);
         }
+        resetBody() {
+            // title: 翻訳のリセット
+            // desc: 現在の翻訳文を破棄し、最新の英語版から全文をコピーします。
+
+            this.work_str = this.src_str;
+        }
         addNameAttribute() {
-            // name属性の追加（id属性対策）
-            // 現在のid属性を流用するので、翻訳済みの文章には適用できない
-            this.work_str = this.work_str.replace(/<h(\d) id="([^"]+)">/g, '<h$1 id="$2" name="$2">');
+            // title: name属性の追加（id属性対策）
+            // desc: 見出し翻訳時にid属性が日本語にならないように、name属性を追加します。既に翻訳されているものは処理しません。
+
+            //this.work_str = this.work_str.replace(/<h(\d) id="(\w+)">/g, '<h$1 id="$2" name="$2">');
+            var skipped = [];
+            this.work_str = this.work_str.replace(/<h(\d) id="([^"]+)">/g, (src,lv,id) => {
+                if (id.match(/[^A-Za-z0-9_\-]/)) {
+                    console.log(`addNameAttribute: skipped ${src}`);
+                    skipped.push(id);
+                    return src;
+                } else {
+                    return `<h${lv} id="${id}" name="${id}">`;
+                }
+            });
+            if (skipped.length) {
+                alert('以下の見出しは既にidが翻訳済みだったため、name属性を追加しませんでした。\n・' + skipped.join('\n・'));
+            }
         }
         applyKnownPhrase() {
-            // 定型文の翻訳
+            // title: 見出し等の自動翻訳
+            // desc: セクション見出しや表の行・列見出しなどの定型句を翻訳します
+
             // foo, ba+r -> /<foo( [^>]*)?>ba+r</
             // TODO: URLを見て適用するルールを限定する？
             const patterns = [
@@ -85,6 +119,9 @@
                 this.work_str = this.work_str.replace(new RegExp(`(<${pattern[0]}(?: [^>]*)?>)${pattern[1]}<`, 'g'), `$1${pattern[2]}<`);
         }
         applyKnownSentence() {
+            // title: 定型文の自動翻訳（β）
+            // desc: 文章の自動翻訳を行います。今のところ継承周りの文言や The ... interface -> ... インターフェイスぐらいしかありません。
+
             // doesn't (implement|inherit) 周りのemの入れ子が適当っぽいので勝手に正規化
             // ※ HTML的には em の入れ子にも意味があるらしいが、
             //     意味を持って使っているようには見えないし、手作業での翻訳でも多分意識してない...
@@ -112,22 +149,41 @@
             this.work_str = this.work_str.replace(/The ([<>/\w]+) interface/, '$1 インターフェイス');
         }
         applyLocalizedUrl() {
+            // title: 記事URLを日本語版に修正
+            // desc: /en-US/docs/ を /ja/docs/ に置き換えます。
             this.work_str = this.work_str.replace(/"\/en-US\/docs\//, '/ja/docs/');
         }
     }
 
-    const Utils = {
+    const Util = {
         setLocalizationInProgressFlag(value) {
             $('[name="localization_tags"][value="inprogress"').prop('checked', value);
         },
         setEditorialReviewFlag(value) {
             $('[name="review_tags"][value="editorial"').prop('checked', value);
         },
-        copyTags()
-        {
+        syncTags() {
+            // 既存のタグをすべて削除
+            $('.tagit-choice').remove();
+
+            // 英語版記事のタグをすべて追加
             const $tag_anchors = $('.tags a');
             const $tagit_input = $('.tagit input');
             $tag_anchors.each((i,e) => $tagit_input.val(e.innerText).blur());
+        },
+        getBaseRevisionId() {
+            return $('#id_based_on').val();
+        },
+        setRevisionComment(str) {
+            $('#id_comment').val(str);
+        },
+        insertRevisionComment(insertion) {
+            const elem = $('#id_comment').get(0);
+            const curtext = elem.value;
+            const newpos = elem.selectionStart + insertion.length;
+            elem.value = curtext.substr(0, elem.selectionStart) + insertion + curtext.substr(elem.selectionEnd);
+            elem.setSelectionRange(newpos, newpos);
+            elem.focus();
         }
     };
 
@@ -139,17 +195,75 @@
         processor.applyLocalizedUrl();
         processor.save();
 
-        Utils.setLocalizationInProgressFlag(false);
-        Utils.setEditorialReviewFlag(true);
-        Utils.copyTags();
+        Util.setLocalizationInProgressFlag(false);
+        Util.setEditorialReviewFlag(true);
+        Util.syncTags();
 
-        $('#id_comment').val(`英語版 rev.${$('#id_based_on').val()} を翻訳`);
+        Util.setRevisionComment(`英語版 rev.${Util.getBaseRevisionId()} を翻訳`);
     }
 
     if (location.pathname.endsWith('$edit')) {
         // 原文にdiffが発生している場合のみ
         if ($('.revision-diff').length) {
-            $('#id_comment').val(`英語版 rev.${$('#id_based_on').val()} を反映`);
+            Util.setRevisionComment(`英語版 rev.${Util.getBaseRevisionId()} を反映`);
+        }
+    }
+
+    const defs = [{
+        target: '.guide-links',
+        prepend: ' • ',
+        label: 'Translation Helper',
+        desc: 'MDN Translation Helper による自動処理を適用します',
+        action: () => {
+            if (!confirm('以下の処理を適用します:\n・name属性の追加\n・見出し等の自動翻訳\n・定型文の自動翻訳\n・記事URLを日本語版に修正')) return;
+            const processor = new BodyProcessor();
+            processor.addNameAttribute();
+            processor.applyKnownPhrase();
+            processor.applyKnownSentence();
+            processor.applyLocalizedUrl();
+            processor.save();
+        }
+    }, {
+        target: '.guide-links',
+        prepend: ' • ',
+        label: '初期化',
+        desc: 'エディタの内容を最新の原文で置き換えます',
+        action: () => {
+            if (!confirm('エディタの内容を最新の原文で置き換えます。よろしいですか？')) return;
+            const processor = new BodyProcessor();
+            processor.resetBody();
+            processor.save();
+        }
+    }, {
+        target: '#page-tags > h3',
+        append: ' ',
+        label: '[英語版のタグと揃える]',
+        desc: '現在設定されているタグを全て削除し、英語版のタグをコピーします',
+        action: () => confirm('現在設定されているタグは全て削除されます。よろしいですか？') && Util.syncTags()
+    }, {
+        target: '#page-comment > h3',
+        append: ' ',
+        label: '[英語版のリビジョン番号を挿入]',
+        desc: '翻訳元である英語版のリビジョン番号を、カーソル位置に挿入します',
+        action: () => Util.insertRevisionComment("rev." + Util.getBaseRevisionId())
+    }];
+
+    for (const def of defs) {
+        const elem = Object.assign(document.createElement('a'), {
+            href: 'javascript:void(0)',
+            style: 'font-size: 1rem',
+            title: def.desc,
+            textContent: def.label,
+            onclick: def.action
+        });
+
+        const targetElem = document.querySelector(def.target);
+        if (def.append) {
+            targetElem.appendChild(document.createTextNode(def.append));
+            targetElem.appendChild(elem);
+        } else {
+            targetElem.insertBefore(document.createTextNode(def.prepend), targetElem.firstChild);
+            targetElem.insertBefore(elem, targetElem.firstChild);
         }
     }
 })();
