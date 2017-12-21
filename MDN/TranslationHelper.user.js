@@ -1,18 +1,18 @@
 // ==UserScript==
-// @name        MDN Translation Helper
+// @name        Translation Helper
 // @description MDNで翻訳を行う際に自動で色々します。
 // @namespace   https://github.com/mozilla-japan/translation/
 // @author      unarist
-// @version     0.3
+// @version     0.3.1
 // @downloadURL https://raw.githubusercontent.com/mozilla-japan/translation/master/MDN/TranslationHelper.user.js
 // @supportURL  https://github.com/mozilla-japan/translation/issues
-// @match       https://developer.mozilla.org/*/docs/*
+// @match       https://developer.mozilla.org/ja/docs/*
+// @match       https://developer.mozilla.org/ja/Add-ons/*
 // ==/UserScript==
 
 // TODO: 適用する処理を選べるように？
 // TODO: 事前or事後の確認（diffを出せるとgood）
 // TODO: 自動翻訳の充実
-// TODO: ja以外の翻訳で起動しないように
 // TODO: WISYWIGエディタを使う以上マークアップに細かいブレがあってパターンに合わないことがある
 // TODO: 読みやすいように、全体の流れを先に持ってきたい（多分移動するだけ）
 // TODO: BodyProcessorのメソッドを舐めて、処理の選択肢を提示したい
@@ -23,6 +23,10 @@
  addNameAttribute id属性が翻訳済みの場合はスキップ
  syncTags 既存のタグを全て削除するように（主に手動実行用）
  各種手動実行リンクを追加
+
+ 0.3.1 (2017/12/21)
+ /ja/ ロケールのみで起動
+ /Add-ons/ でも起動
 
 */
 
