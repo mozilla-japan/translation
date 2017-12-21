@@ -1,21 +1,19 @@
 // ==UserScript==
-// @name        Translation Helper
+// @name        MDN Translation Helper
 // @description MDNで翻訳を行う際に自動で色々します。
 // @namespace   https://github.com/mozilla-japan/translation/
 // @author      unarist
 // @version     0.3.1
 // @downloadURL https://raw.githubusercontent.com/mozilla-japan/translation/master/MDN/TranslationHelper.user.js
 // @supportURL  https://github.com/mozilla-japan/translation/issues
+// @match       https://developer.mozilla.org/en-US/docs/*
+// @match       https://developer.mozilla.org/en-US/Add-ons/*
 // @match       https://developer.mozilla.org/ja/docs/*
 // @match       https://developer.mozilla.org/ja/Add-ons/*
 // ==/UserScript==
 
-// TODO: 適用する処理を選べるように？
-// TODO: 事前or事後の確認（diffを出せるとgood）
-// TODO: 自動翻訳の充実
-// TODO: WISYWIGエディタを使う以上マークアップに細かいブレがあってパターンに合わないことがある
-// TODO: 読みやすいように、全体の流れを先に持ってきたい（多分移動するだけ）
-// TODO: BodyProcessorのメソッドを舐めて、処理の選択肢を提示したい
+// 機能プランについてはGithubのプロジェクトに移動した
+// https://github.com/mozilla-japan/translation/projects/1
 
 /** changelog **
 
@@ -27,6 +25,7 @@
  0.3.1 (2017/12/21)
  /ja/ ロケールのみで起動
  /Add-ons/ でも起動
+ 記事URL変換で /Add-ons/ や絶対パス、1行に複数のリンクがある場合にも対応
 
 */
 
@@ -154,8 +153,10 @@
         }
         applyLocalizedUrl() {
             // title: 記事URLを日本語版に修正
-            // desc: /en-US/docs/ を /ja/docs/ に置き換えます。
-            this.work_str = this.work_str.replace(/"\/en-US\/docs\//, '/ja/docs/');
+            // desc: /en-US/docs/ を /ja/docs/ などに置き換えます。
+            this.work_str = this.work_str.replace(/"\/en-US\/docs\//g, '/ja/docs/')
+                .replace(/"\/en-US\/Add-ons\//g, '/ja/Add-ons/')
+                .replace(/developer\.mozilla\.org\/en-US\//g, 'developer.mozilla.org/ja/');
         }
     }
 
