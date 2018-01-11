@@ -8,8 +8,10 @@
 // @supportURL  https://github.com/mozilla-japan/translation/issues
 // @match       https://developer.mozilla.org/en-US/docs/*
 // @match       https://developer.mozilla.org/en-US/Add-ons/*
+// @match       https://developer.mozilla.org/en-US/Apps/*
 // @match       https://developer.mozilla.org/ja/docs/*
 // @match       https://developer.mozilla.org/ja/Add-ons/*
+// @match       https://developer.mozilla.org/ja/Apps/*
 // ==/UserScript==
 
 // 機能プランについてはGithubのプロジェクトに移動した
@@ -22,10 +24,13 @@
  syncTags 既存のタグを全て削除するように（主に手動実行用）
  各種手動実行リンクを追加
 
- 0.3.1 (2017/12/21)
+0.3.1 (2017/12/21)
  /ja/ ロケールのみで起動
  /Add-ons/ でも起動
  記事URL変換で /Add-ons/ や絶対パス、1行に複数のリンクがある場合にも対応
+
+0.3.2 (2018/01/11)
+ /Apps/ でも起動
 
 */
 
@@ -156,6 +161,7 @@
             // desc: /en-US/docs/ を /ja/docs/ などに置き換えます。
             this.work_str = this.work_str.replace(/"\/en-US\/docs\//g, '/ja/docs/')
                 .replace(/"\/en-US\/Add-ons\//g, '/ja/Add-ons/')
+                .replace(/"\/en-US\/Apps\//g, '/ja/Apps/')
                 .replace(/developer\.mozilla\.org\/en-US\//g, 'developer.mozilla.org/ja/');
         }
     }
