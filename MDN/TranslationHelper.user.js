@@ -63,6 +63,7 @@
             // desc: 見出し翻訳時にid属性が日本語にならないように、name属性を追加します。既に翻訳されているものは処理しません。
 
             //this.work_str = this.work_str.replace(/<h(\d) id="(\w+)">/g, '<h$1 id="$2" name="$2">');
+            var processed = 0;
             var skipped = [];
             this.work_str = this.work_str.replace(/<h(\d) id="([^"]+)">/g, (src,lv,id) => {
                 if (id.match(/[^A-Za-z0-9_\-;'\.\(\)&]/)) {
@@ -70,12 +71,14 @@
                     skipped.push(id);
                     return src;
                 } else {
+                    processed++;
                     return `<h${lv} id="${id}" name="${id}">`;
                 }
             });
             if (skipped.length) {
                 alert('以下の見出しは既にidが翻訳済みだったため、name属性を追加しませんでした。\n・' + skipped.join('\n・'));
             }
+            var note = this.editor.showNotification('name属性追加: ' + processed + " 件");
         }
         applyKnownPhrase() {
             // title: 見出し等の自動翻訳
@@ -162,10 +165,12 @@
         applyLocalizedUrl() {
             // title: 記事URLを日本語版に修正
             // desc: /en-US/docs/ を /ja/docs/ などに置き換えます。
-            this.work_str = this.work_str.replace(/"\/en-US\/docs\//g, '/ja/docs/')
+            var newStr = this.work_str.replace(/"\/en-US\/docs\//g, '/ja/docs/')
                 .replace(/"\/en-US\/Add-ons\//g, '/ja/Add-ons/')
                 .replace(/"\/en-US\/Apps\//g, '/ja/Apps/')
                 .replace(/developer\.mozilla\.org\/en-US\//g, 'developer.mozilla.org/ja/');
+            var note = this.editor.showNotification('記事URLを日本語版に修正: ' + Math.round((this.work_str.length - newStr.length) / 3) + " 件");
+            this.work_str = newStr;
         }
     }
 
