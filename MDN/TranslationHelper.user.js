@@ -3,7 +3,7 @@
 // @description MDNで翻訳を行う際に自動で色々します。
 // @namespace   https://github.com/mozilla-japan/translation/
 // @author      unarist
-// @version     0.3.1
+// @version     0.3.3
 // @downloadURL https://raw.githubusercontent.com/mozilla-japan/translation/master/MDN/TranslationHelper.user.js
 // @supportURL  https://github.com/mozilla-japan/translation/issues
 // @match       https://developer.mozilla.org/en-US/docs/*
@@ -31,6 +31,9 @@
 
 0.3.2 (2018/01/11)
  /Apps/ でも起動
+
+0.3.3 (2018/02/04)
+ ページ内リンクのURL変換バグを修正
 
 */
 
@@ -62,7 +65,7 @@
             //this.work_str = this.work_str.replace(/<h(\d) id="(\w+)">/g, '<h$1 id="$2" name="$2">');
             var skipped = [];
             this.work_str = this.work_str.replace(/<h(\d) id="([^"]+)">/g, (src,lv,id) => {
-                if (id.match(/[^A-Za-z0-9_\-]/)) {
+                if (id.match(/[^A-Za-z0-9_\-;'\.\(\)&]/)) {
                     console.log(`addNameAttribute: skipped ${src}`);
                     skipped.push(id);
                     return src;
