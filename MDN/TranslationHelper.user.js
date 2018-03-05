@@ -48,6 +48,13 @@
             this.editor = CKEDITOR.instances[Object.keys(CKEDITOR.instances)[0]];
             this.dest_str = this.editor.getData();
             this.work_str = this.dest_str;
+
+            // CKEditorのメニューをカスタマイズ
+            this.editor.ui.addButton( 'mdn-link-launch', {
+                label: 'My Bold',
+                command: 'bold',
+                toolbar: 'insert,100'
+            } );
         }
         save() {
             this.editor.setData(this.work_str);
@@ -76,7 +83,7 @@
                 }
             });
             if (skipped.length) {
-                alert('以下の見出しは既にidが翻訳済みだったため、name属性を追加しませんでした。\n・' + skipped.join('\n・'));
+                var note = this.editor.showNotification('以下の見出しは既にidが翻訳済みだったため、name属性を追加しませんでした。<br>・' + skipped.join('<br>・'), 'warning');
             }
             var note = this.editor.showNotification('name属性追加: ' + processed + " 件");
         }
@@ -131,6 +138,7 @@
             ];
             for (const pattern of patterns)
                 this.work_str = this.work_str.replace(new RegExp(`(<${pattern[0]}(?: [^>]*)?>)${pattern[1]}<`, 'g'), `$1${pattern[2]}<`);
+            var note = this.editor.showNotification('見出し等の自動翻訳を行いました。');
         }
         applyKnownSentence() {
             // title: 定型文の自動翻訳（β）
@@ -161,16 +169,41 @@
                                                   (m, p1, p2) => `親である ${p2} から${p2[0] === 'p' ? 'プロパティ': 'メソッド'}を継承します。`);
 
             this.work_str = this.work_str.replace(/The ([<>/\w]+) interface/, '$1 インターフェイス');
+            var note = this.editor.showNotification('定型文の自動翻訳を行いました。');
         }
         applyLocalizedUrl() {
             // title: 記事URLを日本語版に修正
             // desc: /en-US/docs/ を /ja/docs/ などに置き換えます。
             var newStr = this.work_str.replace(/"\/en-US\/docs\//g, '/ja/docs/')
-                .replace(/"\/en-US\/Add-ons\//g, '/ja/Add-ons/')
-                .replace(/"\/en-US\/Apps\//g, '/ja/Apps/')
-                .replace(/developer\.mozilla\.org\/en-US\//g, 'developer.mozilla.org/ja/');
+            .replace(/"\/en-US\/Add-ons\//g, '/ja/Add-ons/')
+            .replace(/"\/en-US\/Apps\//g, '/ja/Apps/')
+            .replace(/developer\.mozilla\.org\/en-US\//g, 'developer.mozilla.org/ja/');
             var note = this.editor.showNotification('記事URLを日本語版に修正: ' + Math.round((this.work_str.length - newStr.length) / 3) + " 件");
             this.work_str = newStr;
+        }
+        scrollDown() {
+            var trs = document.getElementsByClassName('translate-rendered');
+            var note = this.editor.showNotification('100pxさげます。');
+            for (var tr in trs) {
+                //note = this.editor.showNotification(tr.style.paddingTop);
+                //var style = window.getComputedStyle(tr);
+                //note = this.editor.showNotification(style.paddingTop);
+                note = this.editor.showNotification('800pxさげます。');
+                //tr.style.paddingTop = style.paddingTop.replace(/(\d+)(\D*)/, (size, unit) => {
+                    //return (size + 100) + unit;
+                //});
+
+                this.editor.once('instanceReady', function() {
+                    tr.style.paddingTop = '8000px;';
+                    note = this.editor.showNotification('8000pxさげます。');
+                });
+            }
+            var el = document.querySelector(".translate-rendered");
+            this.editor.showNotification(el.style.paddingTop);
+            el.style.paddingTop = '20px';
+            var ja = document.querySelector(".guide-links");
+            ja.style.paddingTop = '60px';
+
         }
     }
 
@@ -252,6 +285,16 @@
             const processor = new BodyProcessor();
             processor.resetBody();
             processor.save();
+        }
+    }, {
+        target: '.guide-links',
+        prepend: ' • ',
+        label: 'down',
+        desc: '原文を下に下げます',
+        action: () => {
+            // TODO
+            const processor = new BodyProcessor();
+            processor.scrollDown();
         }
     }, {
         target: '#page-tags > h3',
