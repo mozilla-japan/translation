@@ -92,6 +92,12 @@
                 ['h2', 'Browser compatibility', 'ブラウザ実装状況'],
                 ['h2', 'Notes', '注記'],
                 ['h2', 'See also', '関連情報'],
+                ['th', 'Type', '型'],
+                ['th', 'Example', '例'],
+                ['th', 'Name', '名前'],
+                ['th', 'Mandatory', '必須'],
+                ['td', 'Yes', 'はい'],
+                ['td', 'No', 'いいえ'],
                 // common - compatibility table
                 ['td', 'Basic support', '基本サポート'],
                 ['th', 'Feature', '機能'],
@@ -158,6 +164,14 @@
                                                   (m, p1, p2) => `親である ${p2} から${p2[0] === 'p' ? 'プロパティ': 'メソッド'}を継承します。`);
 
             this.work_str = this.work_str.replace(/The ([<>/\w]+) interface/, '$1 インターフェイス');
+            this.work_str = this.work_str.replace(/for example,/, '例えば、');
+            this.work_str = this.work_str.replace(/programming language/, 'プログラミング言語');
+            this.work_str = this.work_str.replace(/by default/, '既定では');
+            this.work_str = this.work_str.replace(/This is a localizable property./, 'これはローカライズ可能なプロパティです。');
+
+            // 英語と日本語の境界を修正
+            this.work_str = this.work_str.replace(/([あ-んア-ン])([a-zA-Z]+)/g, '$1 $2')
+                .replace(/([a-zA-Z]+)([あ-んア-ン])/g, '$1 $2');
         }
         applyLocalizedUrl() {
             // title: 記事URLを日本語版に修正
