@@ -36,7 +36,8 @@
  ページ内リンクのURL変換バグを修正
 
 0.3.4 (2017/03/09)
-
+ 変換のログを出す
+ 翻訳語の追加など
 
 */
 
@@ -191,14 +192,6 @@
             .replace(/developer\.mozilla\.org\/en-US\//g, 'developer.mozilla.org/ja/');
             var note = this.editor.showNotification('記事URLを日本語版に修正: ' + Math.round((this.work_str.length - newStr.length) / 3) + " 件");
             this.work_str = newStr;
-        }
-            }
-            var el = document.querySelector(".translate-rendered");
-            this.editor.showNotification(el.style.paddingTop);
-            el.style.paddingTop = '20px';
-            var ja = document.querySelector(".guide-links");
-            ja.style.paddingTop = '60px';
-
         }
     }
 
