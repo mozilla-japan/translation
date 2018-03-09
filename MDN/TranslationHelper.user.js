@@ -35,6 +35,9 @@
 0.3.3 (2018/02/04)
  ページ内リンクのURL変換バグを修正
 
+0.3.4 (2017/03/09)
+
+
 */
 
 (function() {
@@ -49,12 +52,6 @@
             this.dest_str = this.editor.getData();
             this.work_str = this.dest_str;
 
-            // CKEditorのメニューをカスタマイズ
-            this.editor.ui.addButton( 'mdn-link-launch', {
-                label: 'My Bold',
-                command: 'bold',
-                toolbar: 'insert,100'
-            } );
         }
         save() {
             this.editor.setData(this.work_str);
@@ -195,22 +192,6 @@
             var note = this.editor.showNotification('記事URLを日本語版に修正: ' + Math.round((this.work_str.length - newStr.length) / 3) + " 件");
             this.work_str = newStr;
         }
-        scrollDown() {
-            var trs = document.getElementsByClassName('translate-rendered');
-            var note = this.editor.showNotification('100pxさげます。');
-            for (var tr in trs) {
-                //note = this.editor.showNotification(tr.style.paddingTop);
-                //var style = window.getComputedStyle(tr);
-                //note = this.editor.showNotification(style.paddingTop);
-                note = this.editor.showNotification('800pxさげます。');
-                //tr.style.paddingTop = style.paddingTop.replace(/(\d+)(\D*)/, (size, unit) => {
-                    //return (size + 100) + unit;
-                //});
-
-                this.editor.once('instanceReady', function() {
-                    tr.style.paddingTop = '8000px;';
-                    note = this.editor.showNotification('8000pxさげます。');
-                });
             }
             var el = document.querySelector(".translate-rendered");
             this.editor.showNotification(el.style.paddingTop);
@@ -299,16 +280,6 @@
             const processor = new BodyProcessor();
             processor.resetBody();
             processor.save();
-        }
-    }, {
-        target: '.guide-links',
-        prepend: ' • ',
-        label: 'down',
-        desc: '原文を下に下げます',
-        action: () => {
-            // TODO
-            const processor = new BodyProcessor();
-            processor.scrollDown();
         }
     }, {
         target: '#page-tags > h3',
