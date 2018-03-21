@@ -3,7 +3,7 @@
 // @description MDNで翻訳を行う際に自動で色々します。
 // @namespace   https://github.com/mozilla-japan/translation/
 // @author      unarist
-// @version     0.3.4
+// @version     0.4.0
 // @downloadURL https://raw.githubusercontent.com/mozilla-japan/translation/master/MDN/TranslationHelper.user.js
 // @supportURL  https://github.com/mozilla-japan/translation/issues
 // @match       https://developer.mozilla.org/en-US/docs/*
@@ -24,16 +24,8 @@
  syncTags 既存のタグを全て削除するように（主に手動実行用）
  各種手動実行リンクを追加
 
-0.3.1 (2017/12/21)
- /ja/ ロケールのみで起動
- /Add-ons/ でも起動
- 記事URL変換で /Add-ons/ や絶対パス、1行に複数のリンクがある場合にも対応
-
-0.3.2 (2018/01/11)
- /Apps/ でも起動
-
-0.3.3 (2018/02/04)
- ページ内リンクのURL変換バグを修正
+0.4 (2018/03/21)
+ 左右の縦調整を実装
 
 0.3.4 (2017/03/09)
  変換のログを出す
@@ -70,14 +62,14 @@
             //this.work_str = this.work_str.replace(/<h(\d) id="(\w+)">/g, '<h$1 id="$2" name="$2">');
             var processed = 0;
             var skipped = [];
-            this.work_str = this.work_str.replace(/<h(\d) id="([^"]+)">/g, (src,lv,id) => {
+            this.work_str = this.work_str.replace(/<h(\d) ([^ ]* *)id="([^"]+)">/g, (src,lv,other,id) => {
                 if (id.match(/[^A-Za-z0-9_\-;'\.\(\)&]/)) {
                     console.log(`addNameAttribute: skipped ${src}`);
                     skipped.push(id);
                     return src;
                 } else {
                     processed++;
-                    return `<h${lv} id="${id}" name="${id}">`;
+                    return `<h${lv} ${other}id="${id}" name="${id}">`;
                 }
             });
             if (skipped.length) {
@@ -249,6 +241,13 @@
         }
     }
 
+    let el = document.querySelector(".translate-rendered");
+    let style = window.getComputedStyle(el);
+    let margin = style.paddingTop.replace(/(\d+)(\D+)/, '$1');
+    console.log('init: ' + margin);
+    sessionStorage.setItem('balance-left', margin);
+    sessionStorage.setItem('balance-right', '0');
+
     const defs = [{
         target: '.guide-links',
         prepend: ' • ',
@@ -273,6 +272,30 @@
             const processor = new BodyProcessor();
             processor.resetBody();
             processor.save();
+        }
+    }, {
+        target: '.guide-links',
+        prepend: ' • ',
+        label: '↓',
+        desc: '翻訳文を下げます',
+        action: () => {
+            let margin = sessionStorage.getItem('balance-right');
+            margin = 60 + parseInt(margin);
+            var el = document.querySelector(".guide-links");
+            el.style.paddingTop = '' + margin + 'px';
+            sessionStorage.setItem('balance-right', margin);
+        }
+    }, {
+        target: '.guide-links',
+        prepend: ' • ',
+        label: '↑',
+        desc: '原文を下げます',
+        action: () => {
+            let margin = sessionStorage.getItem('balance-left');
+            margin = 60 + parseInt(margin);
+            var el = document.querySelector(".translate-rendered");
+            el.style.paddingTop = '' + margin + 'px';
+            sessionStorage.setItem('balance-left', margin);
         }
     }, {
         target: '#page-tags > h3',
