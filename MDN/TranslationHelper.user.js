@@ -116,7 +116,7 @@
                 // ['h2', 'Active learning:', 'アクティブ学習:'],  // 完全一致なのでマッチしない
                 ['th', 'Prerequisites:', '前提条件:'],
                 ['th', 'Objective:', '目的:'],
-                ['h2', 'In This Module', 'このモジュール内'],
+                ['h2', 'In this module', 'このモジュール内'],
                 // /docs/Web/HTML/Element
                 // 要素には独自の用語・フレーズが多いので、後回し。
                 // いくつかスクリプト最下部にコメントアウトで記載。
@@ -165,7 +165,7 @@
             this.work_str = this.work_str.replace(/Inherits (methods|properties) from its parent, (.+)\./g,
                                                   (m, p1, p2) => `親である ${p2} から${p2[0] === 'p' ? 'プロパティ': 'メソッド'}を継承します。`);
             this.work_str = this.work_str.replace(/This is a (<a.+>)localizable property(<\/a>)\./, 'これは$1ローカライズ可能なプロパティ$2です。');
-            this.work_str = this.work_str.replace(/See (<a.+>.+<\/a>) for details\./, '詳しくは $1を見てください。');
+            this.work_str = this.work_str.replace(/[Ss]ee (<a.+>.+<\/a>) for details\./, '詳しくは $1を見てください。');
 
             this.work_str = this.work_str.replace(/The ([<>/\w]+) interface/, '$1 インターフェイス');
             this.work_str = this.work_str.replace(/[Ff]or example,/, '例えば、');
