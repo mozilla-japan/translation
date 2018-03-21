@@ -112,6 +112,11 @@
                 ['h3', 'Parameters', 'パラメータ'],
                 // DOM Elements
                 ['h3', 'Event handlers', 'イベントハンドラー'],
+                // Learning Area
+                // ['h2', 'Active learning:', 'アクティブ学習:'],  // 完全一致なのでマッチしない
+                ['th', 'Prerequisites:', '前提条件:'],
+                ['th', 'Objective:', '目的:'],
+                ['h2', 'In This Module', 'このモジュール内'],
                 // /docs/Web/HTML/Element
                 // 要素には独自の用語・フレーズが多いので、後回し。
                 // いくつかスクリプト最下部にコメントアウトで記載。
@@ -159,12 +164,13 @@
                                                   (m, p1, p2) => `${p1} インターフェイスが実装する${p2[0] === 'p' ? 'プロパティ': 'メソッド'}はありません。`);
             this.work_str = this.work_str.replace(/Inherits (methods|properties) from its parent, (.+)\./g,
                                                   (m, p1, p2) => `親である ${p2} から${p2[0] === 'p' ? 'プロパティ': 'メソッド'}を継承します。`);
+            this.work_str = this.work_str.replace(/This is a (<a.+>)localizable property(<\/a>)\./, 'これは$1ローカライズ可能なプロパティ$2です。');
+            this.work_str = this.work_str.replace(/See (<a.+>.+<\/a>) for details\./, '詳しくは $1を見てください。');
 
             this.work_str = this.work_str.replace(/The ([<>/\w]+) interface/, '$1 インターフェイス');
-            this.work_str = this.work_str.replace(/for example,/, '例えば、');
+            this.work_str = this.work_str.replace(/[Ff]or example,/, '例えば、');
             this.work_str = this.work_str.replace(/programming language/, 'プログラミング言語');
-            this.work_str = this.work_str.replace(/by default/, '既定では');
-            this.work_str = this.work_str.replace(/This is a localizable property./, 'これはローカライズ可能なプロパティです。');
+            this.work_str = this.work_str.replace(/[Bb]y default/, '既定では');
 
             // 英語と日本語の境界を修正
             this.work_str = this.work_str.replace(/([あ-んア-ン])([a-zA-Z]+)/g, '$1 $2')
