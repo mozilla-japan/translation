@@ -24,16 +24,8 @@
  syncTags 既存のタグを全て削除するように（主に手動実行用）
  各種手動実行リンクを追加
 
-0.3.1 (2017/12/21)
- /ja/ ロケールのみで起動
- /Add-ons/ でも起動
- 記事URL変換で /Add-ons/ や絶対パス、1行に複数のリンクがある場合にも対応
-
-0.3.2 (2018/01/11)
- /Apps/ でも起動
-
-0.3.3 (2018/02/04)
- ページ内リンクのURL変換バグを修正
+0.4 (2018/03/21)
+ 左右の縦調整を実装
 
 */
 
@@ -49,7 +41,7 @@
             this.dest_str = this.editor.getData();
             this.work_str = this.dest_str;
 
-            // CKEditorのメニューをカスタマイズ
+            // TRY CKEditorのメニューをカスタマイズ
             this.editor.ui.addButton( 'mdn-link-launch', {
                 label: 'My Bold',
                 command: 'bold',
@@ -195,30 +187,6 @@
             var note = this.editor.showNotification('記事URLを日本語版に修正: ' + Math.round((this.work_str.length - newStr.length) / 3) + " 件");
             this.work_str = newStr;
         }
-        scrollDown() {
-            var trs = document.getElementsByClassName('translate-rendered');
-            var note = this.editor.showNotification('100pxさげます。');
-            for (var tr in trs) {
-                //note = this.editor.showNotification(tr.style.paddingTop);
-                //var style = window.getComputedStyle(tr);
-                //note = this.editor.showNotification(style.paddingTop);
-                note = this.editor.showNotification('800pxさげます。');
-                //tr.style.paddingTop = style.paddingTop.replace(/(\d+)(\D*)/, (size, unit) => {
-                    //return (size + 100) + unit;
-                //});
-
-                this.editor.once('instanceReady', function() {
-                    tr.style.paddingTop = '8000px;';
-                    note = this.editor.showNotification('8000pxさげます。');
-                });
-            }
-            var el = document.querySelector(".translate-rendered");
-            this.editor.showNotification(el.style.paddingTop);
-            el.style.paddingTop = '20px';
-            var ja = document.querySelector(".guide-links");
-            ja.style.paddingTop = '60px';
-
-        }
     }
 
     const Util = {
@@ -275,6 +243,13 @@
         }
     }
 
+    let el = document.querySelector(".translate-rendered");
+    let style = window.getComputedStyle(el);
+    let margin = style.paddingTop.replace(/(\d+)(\D+)/, '$1');
+    console.log('init: ' + margin);
+    sessionStorage.setItem('balance-left', margin);
+    sessionStorage.setItem('balance-right', '0');
+
     const defs = [{
         target: '.guide-links',
         prepend: ' • ',
@@ -303,12 +278,26 @@
     }, {
         target: '.guide-links',
         prepend: ' • ',
-        label: 'down',
-        desc: '原文を下に下げます',
+        label: '↓',
+        desc: '翻訳文を下げます',
         action: () => {
-            // TODO
-            const processor = new BodyProcessor();
-            processor.scrollDown();
+            let margin = sessionStorage.getItem('balance-right');
+            margin = 60 + parseInt(margin);
+            var el = document.querySelector(".guide-links");
+            el.style.paddingTop = '' + margin + 'px';
+            sessionStorage.setItem('balance-right', margin);
+        }
+    }, {
+        target: '.guide-links',
+        prepend: ' • ',
+        label: '↑',
+        desc: '原文を下げます',
+        action: () => {
+            let margin = sessionStorage.getItem('balance-left');
+            margin = 60 + parseInt(margin);
+            var el = document.querySelector(".translate-rendered");
+            el.style.paddingTop = '' + margin + 'px';
+            sessionStorage.setItem('balance-left', margin);
         }
     }, {
         target: '#page-tags > h3',
