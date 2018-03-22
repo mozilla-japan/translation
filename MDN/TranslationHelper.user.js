@@ -3,7 +3,7 @@
 // @description MDNで翻訳を行う際に自動で色々します。
 // @namespace   https://github.com/mozilla-japan/translation/
 // @author      unarist
-// @version     0.4.0
+// @version     0.4.1
 // @downloadURL https://raw.githubusercontent.com/mozilla-japan/translation/master/MDN/TranslationHelper.user.js
 // @supportURL  https://github.com/mozilla-japan/translation/issues
 // @match       https://developer.mozilla.org/en-US/docs/*
@@ -26,6 +26,10 @@
 
 0.4 (2018/03/21)
  左右の縦調整を実装
+
+0.4.1 (2018/03/22)
+ 左右の縦バランス機能を改良
+ 自動翻訳/整形機能を改良
 
 */
 
