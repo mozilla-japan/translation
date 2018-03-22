@@ -61,10 +61,10 @@
             //this.work_str = this.work_str.replace(/<h(\d) id="(\w+)">/g, '<h$1 id="$2" name="$2">');
             var processed = 0;
             var skipped = [];
-            this.work_str = this.work_str.replace(/<h(\d) ([^ ]* *)id="([^"]+)">/g, (src,lv,other,id) => {
+            this.work_str = this.work_str.replace(/<h(\d) ([^ ]* *)id="([^"]+)">/g, (src, lv, other, id) => {
                 if (id.match(/[^A-Za-z0-9_\-;'\.\(\)&]/)) {
                     console.log(`addNameAttribute: skipped ${src}`);
-                    skipped.push(id);
+                    skipped.push(id + ' (&lt;h' + lv + '&gt;)');
                     return src;
                 } else {
                     processed++;
@@ -72,7 +72,7 @@
                 }
             });
             if (skipped.length) {
-                this.editor.showNotification('以下の見出しは既にidが翻訳済みだったため、name属性を追加しませんでした。<br>・' + skipped.join('<br>・'), 'warning');
+                this.editor.showNotification('以下の見出しは既にidが翻訳済みなどのため、name属性を追加しませんでした。<br>・' + skipped.join('<br>・'), 'warning');
             }
             this.editor.showNotification('name属性追加: ' + processed + " 件");
         }
@@ -177,10 +177,12 @@
             this.work_str = this.work_str.replace(/[Bb]y default/, '既定では');
 
             // 英語と日本語の境界にスペース追加
-            this.work_str = this.work_str.replace(/([あ-んア-ン])(<[^>]*>){0,}([a-zA-Z0-9]+)/g, '$1 $2$3')
-                .replace(/([a-zA-Z0-9]+)(<\/[^>]*>){0,}([あ-んア-ン])/g, '$1$2 $3')
+            this.work_str = this.work_str
                 .replace(/(<code[^>]*>[a-zA-Z][a-zA-Z\.0-9\(\) ]*<\/code>)([あ-んア-ン])/g, '$1 $2')
-                .replace(/([あ-んア-ン])(<code[^>]*>[a-zA-Z][a-zA-Z\.0-9\(\) ]*<\/code>)/g, '$1 $2');
+                .replace(/([あ-んア-ン])(<code[^>]*>[a-zA-Z][a-zA-Z\.0-9\(\) ]*<\/code>)/g, '$1 $2')
+                .replace(/([あ-んア-ン])(<[^>]*>{0,})([a-zA-Z0-9]+)/g, '$1 $2$3')
+                .replace(/([a-zA-Z0-9]+)(<\/[^>]*>{0,})([あ-んア-ン])/g, '$1$2 $3');
+
             this.editor.showNotification('定型文の自動翻訳を行いました。');
         }
         applyLocalizedUrl() {
