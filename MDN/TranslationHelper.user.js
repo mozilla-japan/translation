@@ -72,9 +72,9 @@
                 }
             });
             if (skipped.length) {
-                var note = this.editor.showNotification('以下の見出しは既にidが翻訳済みだったため、name属性を追加しませんでした。<br>・' + skipped.join('<br>・'), 'warning');
+                this.editor.showNotification('以下の見出しは既にidが翻訳済みだったため、name属性を追加しませんでした。<br>・' + skipped.join('<br>・'), 'warning');
             }
-            var note = this.editor.showNotification('name属性追加: ' + processed + " 件");
+            this.editor.showNotification('name属性追加: ' + processed + " 件");
         }
         applyKnownPhrase() {
             // title: 見出し等の自動翻訳
@@ -120,6 +120,7 @@
                 ['th', 'Prerequisites:', '前提条件:'],
                 ['th', 'Objective:', '目的:'],
                 ['h2', 'In this module', 'このモジュール内'],
+                ['p', 'Environment variable:(.*)', '環境変数:$2'],  // プログラム依存なデータかも?
                 // /docs/Web/HTML/Element
                 // 要素には独自の用語・フレーズが多いので、後回し。
                 // いくつかスクリプト最下部にコメントアウトで記載。
@@ -138,7 +139,7 @@
             ];
             for (const pattern of patterns)
                 this.work_str = this.work_str.replace(new RegExp(`(<${pattern[0]}(?: [^>]*)?>)${pattern[1]}<`, 'g'), `$1${pattern[2]}<`);
-            var note = this.editor.showNotification('見出し等の自動翻訳を行いました。');
+            this.editor.showNotification('見出し等の自動翻訳を行いました。');
         }
         applyKnownSentence() {
             // title: 定型文の自動翻訳（β）
@@ -175,10 +176,12 @@
             this.work_str = this.work_str.replace(/programming language/, 'プログラミング言語');
             this.work_str = this.work_str.replace(/[Bb]y default/, '既定では');
 
-            // 英語と日本語の境界を修正
-            this.work_str = this.work_str.replace(/([あ-んア-ン])([a-zA-Z]+)/g, '$1 $2')
-                .replace(/([a-zA-Z]+)([あ-んア-ン])/g, '$1 $2');
-            var note = this.editor.showNotification('定型文の自動翻訳を行いました。');
+            // 英語と日本語の境界にスペース追加
+            this.work_str = this.work_str.replace(/([あ-んア-ン])(<[^>]*>){0,}([a-zA-Z0-9]+)/g, '$1 $2$3')
+                .replace(/([a-zA-Z0-9]+)(<\/[^>]*>){0,}([あ-んア-ン])/g, '$1$2 $3')
+                .replace(/(<code[^>]*>[a-zA-Z][a-zA-Z\.0-9\(\) ]*<\/code>)([あ-んア-ン])/g, '$1 $2')
+                .replace(/([あ-んア-ン])(<code[^>]*>[a-zA-Z][a-zA-Z\.0-9\(\) ]*<\/code>)/g, '$1 $2');
+            this.editor.showNotification('定型文の自動翻訳を行いました。');
         }
         applyLocalizedUrl() {
             // title: 記事URLを日本語版に修正
@@ -187,7 +190,7 @@
             .replace(/"\/en-US\/Add-ons\//g, '/ja/Add-ons/')
             .replace(/"\/en-US\/Apps\//g, '/ja/Apps/')
             .replace(/developer\.mozilla\.org\/en-US\//g, 'developer.mozilla.org/ja/');
-            var note = this.editor.showNotification('記事URLを日本語版に修正: ' + Math.round((this.work_str.length - newStr.length) / 3) + " 件");
+            this.editor.showNotification('記事URLを日本語版に修正: ' + Math.round((this.work_str.length - newStr.length) / 3) + " 件");
             this.work_str = newStr;
         }
     }
@@ -221,6 +224,32 @@
             elem.value = curtext.substr(0, elem.selectionStart) + insertion + curtext.substr(elem.selectionEnd);
             elem.setSelectionRange(newpos, newpos);
             elem.focus();
+        },
+        initBalance(){
+            const elem = document.querySelector(".translate-rendered");
+            const style = window.getComputedStyle(elem);
+            const margin = style.paddingTop.replace(/(\d+)(\D+)/, '$1');
+            console.log('init: ' + margin);
+            sessionStorage.setItem('balance-left', margin);
+            sessionStorage.setItem('balance-right', '0');
+            sessionStorage.setItem('balance-left-init', margin);
+        },
+        resetBalance(){
+            const leftMargin =  sessionStorage.getItem('balance-left-init');
+            document.querySelector(".translate-rendered").style.paddingTop = leftMargin + 'px';
+            document.querySelector(".guide-links").style.paddingTop = '0px';
+            sessionStorage.setItem('balance-left', leftMargin);
+            sessionStorage.setItem('balance-right', '0');
+        },
+        balance(isleft) {
+            const storedName = isleft ? 'balance-left' : 'balance-right';
+            let margin = sessionStorage.getItem( storedName );
+            margin = 60 + parseInt(margin);
+            const elem = isleft ?
+                document.querySelector(".translate-rendered") :
+                document.querySelector(".guide-links");
+            elem.style.paddingTop = '' + margin + 'px';
+            sessionStorage.setItem(storedName, margin);
         }
     };
 
@@ -246,12 +275,7 @@
         }
     }
 
-    let el = document.querySelector(".translate-rendered");
-    let style = window.getComputedStyle(el);
-    let margin = style.paddingTop.replace(/(\d+)(\D+)/, '$1');
-    console.log('init: ' + margin);
-    sessionStorage.setItem('balance-left', margin);
-    sessionStorage.setItem('balance-right', '0');
+    Util.initBalance();
 
     const defs = [{
         target: '.guide-links',
@@ -281,27 +305,39 @@
     }, {
         target: '.guide-links',
         prepend: ' • ',
-        label: '↓',
+        label: '[↓]',
         desc: '翻訳文を下げます',
-        action: () => {
-            let margin = sessionStorage.getItem('balance-right');
-            margin = 60 + parseInt(margin);
-            var el = document.querySelector(".guide-links");
-            el.style.paddingTop = '' + margin + 'px';
-            sessionStorage.setItem('balance-right', margin);
-        }
+        action: () => { Util.balance(false); }
     }, {
         target: '.guide-links',
-        prepend: ' • ',
-        label: '↑',
+        prepend: ' ',
+        label: '[-]',
+        desc: '原文と翻訳文の位置をリセットします',
+        action: () => { Util.resetBalance(); }
+    }, {
+        target: '.guide-links',
+        prepend: ' ',
+        label: '[↑]',
         desc: '原文を下げます',
-        action: () => {
-            let margin = sessionStorage.getItem('balance-left');
-            margin = 60 + parseInt(margin);
-            var el = document.querySelector(".translate-rendered");
-            el.style.paddingTop = '' + margin + 'px';
-            sessionStorage.setItem('balance-left', margin);
-        }
+        action: () => { Util.balance(true); }
+    }, {
+        target: '#page-tags > h3',
+        append: ' ',
+        label: '[↑]',
+        desc: '原文を下げます',
+        action: () => { Util.balance(true); }
+    }, {
+        target: '#page-tags > h3',
+        append: ' ',
+        label: '[-]',
+        desc: '原文と翻訳文の位置をリセットします',
+        action: () => { Util.resetBalance(); }
+    }, {
+        target: '#page-tags > h3',
+        append: ' ',
+        label: '[↓]',
+        desc: '翻訳文を下げます',
+        action: () => { Util.balance(false); }
     }, {
         target: '#page-tags > h3',
         append: ' ',
