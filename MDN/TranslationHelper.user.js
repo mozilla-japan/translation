@@ -66,7 +66,7 @@
             var processed = 0;
             var skipped = [];
             this.work_str = this.work_str.replace(/<h(\d) ([^ ]* *)id="([^"]+)">/g, (src, lv, other, id) => {
-                if (id.match(/[^A-Za-z0-9_\-;'\.\(\)&]/)) {
+                if (id.match(/[^A-Za-z0-9_\-–;'\.\(\)&]/)) {
                     console.log(`addNameAttribute: skipped ${src}`);
                     skipped.push(id + ' (&lt;h' + lv + '&gt;)');
                     return src;
