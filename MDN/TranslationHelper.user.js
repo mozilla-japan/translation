@@ -43,6 +43,9 @@
 
         }
         save() {
+            if (this.work_str.length == this.dest_str.length) {
+                this.editor.showNotification('Translation Helper処理前後のエディターの文字数が同一です (処理されていない可能性があります)', 'warning');
+            }
             this.editor.setData(this.work_str);
         }
         resetBody() {
