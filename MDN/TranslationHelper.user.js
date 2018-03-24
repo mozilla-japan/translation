@@ -176,16 +176,16 @@
             this.work_str = this.work_str.replace(/[Ss]ee (<a.+>.+<\/a>) for details\./, '詳しくは $1を見てください。');
 
             this.work_str = this.work_str.replace(/The ([<>/\w]+) interface/, '$1 インターフェイス');
-            this.work_str = this.work_str.replace(/[Ff]or example,/, '例えば、');
+            this.work_str = this.work_str.replace(/[Ff]or example,?/, '例えば、');
             this.work_str = this.work_str.replace(/programming language/, 'プログラミング言語');
             this.work_str = this.work_str.replace(/[Bb]y default/, '既定では');
 
             // 英語と日本語の境界にスペース追加
             this.work_str = this.work_str
-                .replace(/(<code[^>]*>[a-zA-Z][a-zA-Z\.0-9\(\) ]*<\/code>)([あ-んア-ン])/g, '$1 $2')
-                .replace(/([あ-んア-ン])(<code[^>]*>[a-zA-Z][a-zA-Z\.0-9\(\) ]*<\/code>)/g, '$1 $2')
-                .replace(/([あ-んア-ン])((?:<[^>]*>){0,})([a-zA-Z0-9]+)/g, '$1 $2$3')
-                .replace(/([a-zA-Z0-9]+)((?:<\/[^>]*>){0,})([あ-んア-ン])/g, '$1$2 $3');
+                .replace(/(<code[^>]*>[a-zA-Z][a-zA-Z\.0-9%\(\) ]*<\/code>)([あ-んア-ン])/g, '$1 $2')
+                .replace(/([あ-んア-ン])(<code[^>]*>[a-zA-Z][a-zA-Z\.0-9%\(\) ]*<\/code>)/g, '$1 $2')
+                .replace(/([あ-んア-ン])((?:<[^>]*>){0,})([a-zA-Z0-9%]+)/g, '$1 $2$3')
+                .replace(/([a-zA-Z0-9%]+)((?:<\/[^>]*>){0,})([あ-んア-ン])/g, '$1$2 $3');
 
             this.editor.showNotification('定型文の自動翻訳を行いました。');
         }
