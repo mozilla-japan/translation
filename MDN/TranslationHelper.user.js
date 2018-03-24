@@ -192,9 +192,9 @@
         applyLocalizedUrl() {
             // title: 記事URLを日本語版に修正
             // desc: /en-US/docs/ を /ja/docs/ などに置き換えます。
-            var newStr = this.work_str.replace(/"\/en-US\/docs\//g, '/ja/docs/')
-            .replace(/"\/en-US\/Add-ons\//g, '/ja/Add-ons/')
-            .replace(/"\/en-US\/Apps\//g, '/ja/Apps/')
+            var newStr = this.work_str.replace(/"\/en-US\//g, '/ja//')
+            // .replace(/"\/en-US\/Add-ons\//g, '/ja/Add-ons/')
+            // .replace(/"\/en-US\/Apps\//g, '/ja/Apps/')
             .replace(/developer\.mozilla\.org\/en-US\//g, 'developer.mozilla.org/ja/');
             this.editor.showNotification('記事URLを日本語版に修正: ' + Math.round((this.work_str.length - newStr.length) / 3) + " 件");
             this.work_str = newStr;
