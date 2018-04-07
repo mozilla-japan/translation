@@ -3,7 +3,7 @@
 // @description MDNで翻訳を行う際に自動で色々します。
 // @namespace   https://github.com/mozilla-japan/translation/
 // @author      unarist
-// @version     0.4.1
+// @version     0.4.2
 // @downloadURL https://raw.githubusercontent.com/mozilla-japan/translation/master/MDN/TranslationHelper.user.js
 // @supportURL  https://github.com/mozilla-japan/translation/issues
 // @match       https://developer.mozilla.org/en-US/docs/*
@@ -30,6 +30,9 @@
 0.4.1 (2018/03/22)
  左右の縦バランス機能を改良
  自動翻訳/整形機能を改良
+
+0.4.2 (2018/04/07)
+ ページ最下部にもTranslationHelperボタン追加
 
 */
 
@@ -101,6 +104,10 @@
                 ['th', 'Mandatory', '必須'],
                 ['td', 'Yes', 'はい'],
                 ['td', 'No', 'いいえ'],
+                // common - タグ限定無しの変換
+                ['', '[Ff]or example,?', '例えば、'],
+                ['', 'programming language', 'プログラミング言語'],
+                ['', '[Bb]y default', '既定では'],
                 // common - compatibility table
                 ['td', 'Basic support', '基本サポート'],
                 ['th', 'Feature', '機能'],
@@ -117,6 +124,7 @@
                 ['h2', 'Properties', 'プロパティ'],
                 ['h2', 'Syntax', '構文'],
                 ['h3', 'Parameters', 'パラメータ'],
+                ['h3', 'Constants', '定数'],
                 // DOM Elements
                 ['h3', 'Event handlers', 'イベントハンドラー'],
                 // Learning Area
@@ -125,6 +133,11 @@
                 ['th', 'Objective:', '目的:'],
                 ['h2', 'In this module', 'このモジュール内'],
                 ['p', 'Environment variable:(.*)', '環境変数:$2'],  // プログラム依存なデータかも?
+             　 // Glossary
+                ['h2', 'Learn more', '関連項目'],
+                ['h3', 'General knowledge', '一般知識'],
+                ['h3', 'Technical reference', '技術リファレンス'],
+                ['h3', 'Learn about it', 'これについて学習する'],
                 // /docs/Web/HTML/Element
                 // 要素には独自の用語・フレーズが多いので、後回し。
                 // いくつかスクリプト最下部にコメントアウトで記載。
@@ -142,7 +155,11 @@
                 ['dd', 'None', 'なし']
             ];
             for (const pattern of patterns)
-                this.work_str = this.work_str.replace(new RegExp(`(<${pattern[0]}(?: [^>]*)?>)${pattern[1]}<`, 'g'), `$1${pattern[2]}<`);
+                if (pattern[0] === ''){
+                  this.work_str = this.work_str.replace(new RegExp(`${pattern[1]}`, 'g'), `${pattern[2]}`);
+                } else{
+                  this.work_str = this.work_str.replace(new RegExp(`(<${pattern[0]}(?: [^>]*)?>)${pattern[1]}<`, 'g'), `$1${pattern[2]}<`);
+                }
             this.editor.showNotification('見出し等の自動翻訳を行いました。');
         }
         applyKnownSentence() {
@@ -174,11 +191,8 @@
                                                   (m, p1, p2) => `親である ${p2} から${p2[0] === 'p' ? 'プロパティ': 'メソッド'}を継承します。`);
             this.work_str = this.work_str.replace(/This is a (<a.+>)localizable property(<\/a>)\./, 'これは$1ローカライズ可能なプロパティ$2です。');
             this.work_str = this.work_str.replace(/[Ss]ee (<a.+>.+<\/a>) for details\./, '詳しくは $1を見てください。');
-
+            this.work_str = this.work_str.replace(/\{\{[Ii]nterwiki\((.*)\)\}\} on Wikipedia/, 'Wikipedia の {{interwiki($1)}}');
             this.work_str = this.work_str.replace(/The ([<>/\w]+) interface/, '$1 インターフェイス');
-            this.work_str = this.work_str.replace(/[Ff]or example,?/, '例えば、');
-            this.work_str = this.work_str.replace(/programming language/, 'プログラミング言語');
-            this.work_str = this.work_str.replace(/[Bb]y default/, '既定では');
 
             // 英語と日本語の境界にスペース追加
             this.work_str = this.work_str
@@ -344,6 +358,20 @@
         label: '[↓]',
         desc: '翻訳文を下げます',
         action: () => { Util.balance(false); }
+     }, {
+        target: '#page-tags > h3',
+        append: ' ',
+        label: '[Translation Helper]',
+        desc: 'MDN Translation Helper による自動処理を適用します',
+        action: () => {
+            if (!confirm('以下の処理を適用します:\n・name属性の追加\n・見出し等の自動翻訳\n・定型文の自動翻訳\n・記事URLを日本語版に修正')) return;
+            const processor = new BodyProcessor();
+            processor.addNameAttribute();
+            processor.applyKnownPhrase();
+            processor.applyKnownSentence();
+            processor.applyLocalizedUrl();
+            processor.save();
+        }
     }, {
         target: '#page-tags > h3',
         append: ' ',
