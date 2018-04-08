@@ -33,6 +33,7 @@
 
 0.4.2 (2018/04/07)
  ページ最下部にもTranslationHelperボタン追加
+ GreaseMonkey 対応
 
 */
 
@@ -232,10 +233,10 @@
             $tag_anchors.each((i,e) => $tagit_input.val(e.innerText).blur());
         },
         getBaseRevisionId() {
-            return document.querySelector('#id_based_on').val();
+            return document.querySelector('#id_based_on').value;
         },
         setRevisionComment(str) {
-            document.querySelector('#id_comment').val(str);
+            document.querySelector('#id_comment').value = str;
         },
         insertRevisionComment(insertion) {
             const elem = document.querySelector('#id_comment').get(0);
