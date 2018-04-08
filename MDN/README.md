@@ -36,7 +36,12 @@
 
 開発は主に Google Chrome で行っていますが、ES2015が普通に使える環境なら動くはずです。
 
-1. Greasemonkey や Tampermonkey といった、UserScriptを動かすための拡張機能を入れます
+1. UserScriptを動かすための拡張機能をインストールします(次のようなもの)
+ - Tampermonkey
+  -[Firefox版](https://addons.mozilla.org/ja/firefox/addon/tampermonkey/) 
+  -[Chrome版](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)
+ - <del>Greasemonkey
+  -[Firefox版](https://addons.mozilla.org/ja/firefox/addon/greasemonkey/)</del>
 2. このリポジトリの MDN/TranslationHelper.user.js を開いて右上の Raw をクリック。  
 もしくはこちらから: https://github.com/mozilla-japan/translation/raw/master/MDN/TranslationHelper.user.js
 
