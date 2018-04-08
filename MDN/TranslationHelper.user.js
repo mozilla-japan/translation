@@ -43,7 +43,7 @@
 
     class BodyProcessor {
         constructor() {
-            this.src_str = $('.translate-source').text();
+            this.src_str = document.querySelector('.translate-source').text();
             this.editor = CKEDITOR.instances[Object.keys(CKEDITOR.instances)[0]];
             this.dest_str = this.editor.getData();
             this.work_str = this.dest_str;
@@ -217,28 +217,28 @@
 
     const Util = {
         setLocalizationInProgressFlag(value) {
-            $('[name="localization_tags"][value="inprogress"').prop('checked', value);
+            document.querySelector('[name="localization_tags"][value="inprogress"').prop('checked', value);
         },
         setEditorialReviewFlag(value) {
-            $('[name="review_tags"][value="editorial"').prop('checked', value);
+            document.querySelector('[name="review_tags"][value="editorial"').prop('checked', value);
         },
         syncTags() {
             // 既存のタグをすべて削除
-            $('.tagit-choice').remove();
+            document.querySelector('.tagit-choice').remove();
 
             // 英語版記事のタグをすべて追加
-            const $tag_anchors = $('.tags a');
-            const $tagit_input = $('.tagit input');
+            const $tag_anchors = document.querySelector('.tags a');
+            const $tagit_input = document.querySelector('.tagit input');
             $tag_anchors.each((i,e) => $tagit_input.val(e.innerText).blur());
         },
         getBaseRevisionId() {
-            return $('#id_based_on').val();
+            return document.querySelector('#id_based_on').val();
         },
         setRevisionComment(str) {
-            $('#id_comment').val(str);
+            document.querySelector('#id_comment').val(str);
         },
         insertRevisionComment(insertion) {
-            const elem = $('#id_comment').get(0);
+            const elem = document.querySelector('#id_comment').get(0);
             const curtext = elem.value;
             const newpos = elem.selectionStart + insertion.length;
             elem.value = curtext.substr(0, elem.selectionStart) + insertion + curtext.substr(elem.selectionEnd);
@@ -290,7 +290,7 @@
 
     if (location.pathname.endsWith('$edit')) {
         // 原文にdiffが発生している場合のみ
-        if ($('.revision-diff').length) {
+        if (document.querySelector('.revision-diff')) {
             Util.setRevisionComment(`英語版 rev.${Util.getBaseRevisionId()} を反映`);
         }
     }
