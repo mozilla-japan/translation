@@ -129,7 +129,7 @@
                 // DOM Elements
                 ['h3', 'Event handlers', 'イベントハンドラー'],
                 // Learning Area
-                // ['h2', 'Active learning:', 'アクティブ学習:'],  // 完全一致なのでマッチしない
+                ['h2', 'Active learning:', 'アクティブラーニング:'],  // 一般的な表現
                 ['th', 'Prerequisites:', '前提条件:'],
                 ['th', 'Objective:', '目的:'],
                 ['h2', 'In this module', 'このモジュール内'],
@@ -200,9 +200,50 @@
                 .replace(/(<code[^>]*>[a-zA-Z][a-zA-Z\.0-9%\(\) ]*<\/code>)([あ-んア-ン])/g, '$1 $2')
                 .replace(/([あ-んア-ン])(<code[^>]*>[a-zA-Z][a-zA-Z\.0-9%\(\) ]*<\/code>)/g, '$1 $2')
                 .replace(/([あ-んア-ン])((?:<[^>]*>){0,})([a-zA-Z0-9%]+)/g, '$1 $2$3')
-                .replace(/([a-zA-Z0-9%]+)((?:<\/[^>]*>){0,})([あ-んア-ン])/g, '$1$2 $3');
+                .replace(/([a-zA-Z0-9%]+)((?:<\/[^>]*>){0,})([あ-んア-ン])/g, '$1$2 $3')
+                .replace(/([0-9]+)((?:<\/[^>]*>){0,})([個])/g, '$1$2 $3')
+                .replace(/([、。]) /g, '$1');    // 句読点の後の半角スペース除去
 
             this.editor.showNotification('定型文の自動翻訳を行いました。');
+        }
+        alllyEditGuideLine() {
+            // title: 表記をガイドラインにあわせる
+            // desc: 長音化や表記のゆれなどをL10n ガイドライン(https://github.com/mozilla-japan/translation/wiki/L10N-Guideline)に準ずるようにします
+            const longPatterns = [
+                'サーバ',
+                'ユーザ',
+                'ブラウザ',
+                'コンピュータ',
+                'カレンダ',
+                'プライバシ',
+                'イテレータ',
+                'ジェネレータ',
+                'ディレクトリ'
+            ];
+            // 長音化
+            let wc = this.work_str.length;
+            for (const pattern of longPatterns){
+                this.work_str = this.work_str.replace(new RegExp(`${pattern}`, 'g'), `${pattern}ー`)
+                    .replace(new RegExp(`${pattern}ーー`, 'g'), `${pattern}ー`);
+            }
+            this.editor.showNotification('長音化: ' + (this.work_str.length - wc) + '件');
+
+            const shortPatterns = [
+                'アクセシビリティ',
+                'ポータビリティ',
+                'プロパティ',
+                'セキュリティ',
+                'ハードウェア',
+                'ソフトウェア',
+                'プロキシ'
+
+            ];
+            // 長音廃止
+            wc = this.work_str.length;
+            for (const pattern of shortPatterns){
+                this.work_str = this.work_str.replace(new RegExp(`${pattern}ー`, 'g'), `${pattern}`);
+            }
+            this.editor.showNotification('長音廃止: ' + (this.work_str.length - wc) + '件');
         }
         applyLocalizedUrl() {
             // title: 記事URLを日本語版に修正
@@ -279,6 +320,7 @@
         processor.addNameAttribute();
         processor.applyKnownPhrase();
         processor.applyKnownSentence();
+        processor.alllyEditGuideLine();
         processor.applyLocalizedUrl();
         processor.save();
 
@@ -309,6 +351,7 @@
             processor.addNameAttribute();
             processor.applyKnownPhrase();
             processor.applyKnownSentence();
+            processor.alllyEditGuideLine();
             processor.applyLocalizedUrl();
             processor.save();
         }
@@ -370,6 +413,7 @@
             processor.addNameAttribute();
             processor.applyKnownPhrase();
             processor.applyKnownSentence();
+            processor.alllyEditGuideLine();
             processor.applyLocalizedUrl();
             processor.save();
         }
