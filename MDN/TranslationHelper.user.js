@@ -3,7 +3,7 @@
 // @description MDNで翻訳を行う際に自動で色々します。
 // @namespace   https://github.com/mozilla-japan/translation/
 // @author      unarist
-// @version     0.4.2
+// @version     0.4.3
 // @downloadURL https://raw.githubusercontent.com/mozilla-japan/translation/master/MDN/TranslationHelper.user.js
 // @supportURL  https://github.com/mozilla-japan/translation/issues
 // @match       https://developer.mozilla.org/en-US/docs/*
@@ -34,6 +34,10 @@
 0.4.2 (2018/04/07)
  ページ最下部にもTranslationHelperボタン追加
  GreaseMonkey 対応
+
+0.4.3 (2018/04/22)
+ 長音の自動修正(サーバ => サーバー など)
+ 表記ガイドラインの修正候補提案を追加
 
 */
 
@@ -67,8 +71,8 @@
             // desc: 見出し翻訳時にid属性が日本語にならないように、name属性を追加します。既に翻訳されているものは処理しません。
 
             //this.work_str = this.work_str.replace(/<h(\d) id="(\w+)">/g, '<h$1 id="$2" name="$2">');
-            var processed = 0;
-            var skipped = [];
+            let processed = 0;
+            let skipped = [];
             this.work_str = this.work_str.replace(/<h(\d) ([^ ]* *)id="([^"]+)">/g, (src, lv, other, id) => {
                 if (id.match(/[^A-Za-z0-9_\-–;'\.\(\)&]/)) {
                     console.log(`addNameAttribute: skipped ${src}`);
@@ -96,7 +100,7 @@
                 ['strong', 'Note:', '注:'],
                 ['strong', 'Note', '注'],
                 ['h2', 'Examples?', '例'],
-                ['h2', 'Browser compatibility', 'ブラウザ実装状況'],
+                ['h2', 'Browser compatibility', 'ブラウザー実装状況'],
                 ['h2', 'Notes', '注記'],
                 ['h2', 'See also', '関連情報'],
                 ['th', 'Type', '型'],
@@ -124,7 +128,7 @@
                 ['h2', 'Methods', 'メソッド'],
                 ['h2', 'Properties', 'プロパティ'],
                 ['h2', 'Syntax', '構文'],
-                ['h3', 'Parameters', 'パラメータ'],
+                ['h3', 'Parameters', 'パラメーター'],
                 ['h3', 'Constants', '定数'],
                 // DOM Elements
                 ['h3', 'Event handlers', 'イベントハンドラー'],
@@ -201,14 +205,14 @@
                 .replace(/([あ-んア-ン])(<code[^>]*>[a-zA-Z][a-zA-Z\.0-9%\(\) ]*<\/code>)/g, '$1 $2')
                 .replace(/([あ-んア-ン])((?:<[^>]*>){0,})([a-zA-Z0-9%]+)/g, '$1 $2$3')
                 .replace(/([a-zA-Z0-9%]+)((?:<\/[^>]*>){0,})([あ-んア-ン])/g, '$1$2 $3')
-                .replace(/([0-9]+)((?:<\/[^>]*>){0,})([個])/g, '$1$2 $3')
+                .replace(/([0-9]+)((?:<\/[^>]*>){0,})([個回])/g, '$1$2 $3')
                 .replace(/([、。]) /g, '$1');    // 句読点の後の半角スペース除去
 
             this.editor.showNotification('定型文の自動翻訳を行いました。');
         }
         alllyEditGuideLine() {
             // title: 表記をガイドラインにあわせる
-            // desc: 長音化や表記のゆれなどをL10n ガイドライン(https://github.com/mozilla-japan/translation/wiki/L10N-Guideline)に準ずるようにします
+            // desc: 長音化や表記のゆれなどを L10nガイドライン(https://github.com/mozilla-japan/translation/wiki/L10N-Guideline)に準ずるようにします
             const longPatterns = [
                 'サーバ',
                 'ユーザ',
@@ -233,6 +237,7 @@
                 'ポータビリティ',
                 'プロパティ',
                 'セキュリティ',
+                'コミュニティ',
                 'ハードウェア',
                 'ソフトウェア',
                 'プロキシ'
@@ -244,11 +249,48 @@
                 this.work_str = this.work_str.replace(new RegExp(`${pattern}ー`, 'g'), `${pattern}`);
             }
             this.editor.showNotification('長音廃止: ' + (this.work_str.length - wc) + '件');
+
+            const suggestPatterns = [
+                ['下さい', 'ください'],
+                ['出来る', 'できる'],
+                ['出来ます', 'できます'],
+                ['全て', 'すべて'],
+                ['殆ど', 'ほとんど'],
+                ['幾つか', 'いくつか'],
+                ['更に', 'さらに'],
+                ['稀に', 'まれに'],
+                ['偶に', 'たまに'],
+                ['直ぐに', 'すぐに'],
+                ['毎に', 'ごとに'],
+                ['但し', 'ただし'],
+                ['然し', 'しかし'],
+                ['或いは', 'あるいは'],
+                ['又は', 'または'],
+                ['及び', 'および'],
+                ['且つ', 'かつ'],
+                ['未だ', 'まだ'],
+                ['於いて', 'おいて'],
+                /*['', ''],
+                ['', ''],
+                ['', ''],
+                ['', ''],
+                ['', ''],*/
+            ];
+            let suggestions = [];
+            for (const pattern of suggestPatterns){
+                this.work_str = this.work_str.replace(new RegExp(`(....)(${pattern[0]})(....)`, 'g'), (src, pre, match, post) => {
+                    suggestions.push(`修正候補: ${pre}${match}${post}<br>    => ${pre}${pattern[1]}${post}`);
+                    return src;    // 変更はしない
+                });
+            }
+            if (suggestions.length) {
+                this.editor.showNotification('以下の表記を見直してください。<br>・' + suggestions.join('<br>・'), 'warning');
+            }
         }
         applyLocalizedUrl() {
             // title: 記事URLを日本語版に修正
             // desc: /en-US/docs/ を /ja/docs/ などに置き換えます。
-            var newStr = this.work_str.replace(/"\/en-US\//g, '/ja//')
+            const newStr = this.work_str.replace(/"\/en-US\//g, '/ja//')
             // .replace(/"\/en-US\/Add-ons\//g, '/ja/Add-ons/')
             // .replace(/"\/en-US\/Apps\//g, '/ja/Apps/')
             .replace(/developer\.mozilla\.org\/en-US\//g, 'developer.mozilla.org/ja/');
