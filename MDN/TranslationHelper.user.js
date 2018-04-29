@@ -39,6 +39,9 @@
  長音の自動修正(サーバ => サーバー など)
  表記ガイドラインの修正候補提案を追加
 
+0.4.4 (2018/04/29)
+ ページ内リンクのURL変換バグを修正(#276)
+
 */
 
 (function() {
@@ -290,7 +293,8 @@
         applyLocalizedUrl() {
             // title: 記事URLを日本語版に修正
             // desc: /en-US/docs/ を /ja/docs/ などに置き換えます。
-            const newStr = this.work_str.replace(/"\/en-US\//g, '/ja//')
+            const newStr = this.work_str.replace(/"\/en-US\//g, '/ja/')
+            .replace(/"\/ja\/\//g, '/ja/')
             // .replace(/"\/en-US\/Add-ons\//g, '/ja/Add-ons/')
             // .replace(/"\/en-US\/Apps\//g, '/ja/Apps/')
             .replace(/developer\.mozilla\.org\/en-US\//g, 'developer.mozilla.org/ja/');
