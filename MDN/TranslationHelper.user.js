@@ -116,6 +116,10 @@
                 ['', '[Ff]or example,?', '例えば、'],
                 ['', 'programming language', 'プログラミング言語'],
                 ['', '[Bb]y default', '既定では'],
+                // common - 日本語表記の強制変換
+                ['', 'インターフェース', 'インターフェイス'],
+                ['', 'インタフェース', 'インターフェイス'],
+                ['', 'コンマ', 'カンマ'],
                 // common - compatibility table
                 ['td', 'Basic support', '基本サポート'],
                 ['th', 'Feature', '機能'],
@@ -223,6 +227,8 @@
                 'コンピュータ',
                 'カレンダ',
                 'プライバシ',
+                'バイナリ',
+                'メモリ',
                 'イテレータ',
                 'ジェネレータ',
                 'ディレクトリ'
@@ -366,7 +372,6 @@
         processor.addNameAttribute();
         processor.applyKnownPhrase();
         processor.applyKnownSentence();
-        processor.alllyEditGuideLine();
         processor.applyLocalizedUrl();
         processor.save();
 
