@@ -3,7 +3,7 @@
 // @description MDNで翻訳を行う際に自動で色々します。
 // @namespace   https://github.com/mozilla-japan/translation/
 // @author      unarist
-// @version     0.4.8
+// @version     0.4.9
 // @downloadURL https://raw.githubusercontent.com/mozilla-japan/translation/master/MDN/TranslationHelper.user.js
 // @supportURL  https://github.com/mozilla-japan/translation/issues
 // @match       https://developer.mozilla.org/en-US/docs/*
@@ -12,6 +12,12 @@
 // @match       https://developer.mozilla.org/ja/docs/*
 // @match       https://developer.mozilla.org/ja/Add-ons/*
 // @match       https://developer.mozilla.org/ja/Apps/*
+// @match       https://wiki.developer.mozilla.org/en-US/docs/*
+// @match       https://wiki.developer.mozilla.org/en-US/Add-ons/*
+// @match       https://wiki.developer.mozilla.org/en-US/Apps/*
+// @match       https://wiki.developer.mozilla.org/ja/docs/*
+// @match       https://wiki.developer.mozilla.org/ja/Add-ons/*
+// @match       https://wiki.developer.mozilla.org/ja/Apps/*
 // ==/UserScript==
 
 // 機能プランについてはGithubのプロジェクトに移動した
@@ -55,6 +61,9 @@
 
 0.4.8 (2018/8/23)
  name属性追加処理でゴミが入ることがあるのを修正 (0.4.7でのデグレ)
+
+0.4.9 (2020/1/7)
+ 編集URLが追加されたのに対応(#464)
 
 */
 
