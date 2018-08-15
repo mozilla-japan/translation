@@ -3,7 +3,7 @@
 // @description MDNで翻訳を行う際に自動で色々します。
 // @namespace   https://github.com/mozilla-japan/translation/
 // @author      unarist
-// @version     0.4.5
+// @version     0.4.6
 // @downloadURL https://raw.githubusercontent.com/mozilla-japan/translation/master/MDN/TranslationHelper.user.js
 // @supportURL  https://github.com/mozilla-japan/translation/issues
 // @match       https://developer.mozilla.org/en-US/docs/*
@@ -44,6 +44,10 @@
 
 0.4.5 (2018/05/03)
  長音処理の追加、新規翻訳時の長音処理キャンセル(#266 #277)
+
+0.4.6 (2018/08/15)
+ リンクURL変換時に"が消えていたバグを修正
+ 見出し翻訳エントリの追加
 
 */
 
