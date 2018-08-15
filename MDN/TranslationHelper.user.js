@@ -141,6 +141,7 @@
                 ['h2', 'Syntax', '構文'],
                 ['h3', 'Parameters', 'パラメーター'],
                 ['h3', 'Constants', '定数'],
+                ['h3', 'Exceptions', '例外'],
                 // DOM Elements
                 ['h3', 'Event handlers', 'イベントハンドラー'],
                 // Learning Area
