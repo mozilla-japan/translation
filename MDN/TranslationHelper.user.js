@@ -58,7 +58,7 @@
 
     class BodyProcessor {
         constructor() {
-            this.src_str = document.querySelector('.translate-source').textContent;
+            this.src_str = document.querySelector('.translate-source > textarea').textContent;
             this.editor = CKEDITOR.instances[Object.keys(CKEDITOR.instances)[0]];
             this.dest_str = this.editor.getData();
             this.work_str = this.dest_str;
