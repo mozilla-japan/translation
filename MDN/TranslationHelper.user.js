@@ -83,7 +83,7 @@
             //this.work_str = this.work_str.replace(/<h(\d) id="(\w+)">/g, '<h$1 id="$2" name="$2">');
             let processed = 0;
             let skipped = [];
-            this.work_str = this.work_str.replace(/<h(\d) ([^ ]* *)id="([^"]+)">/g, (src, lv, other, id) => {
+            this.work_str = this.work_str.replace(/<h(\d) ([^ >]* +)?id="([^"]+)">/g, (src, lv, other, id) => {
                 if (id.match(/[^A-Za-z0-9_\-–;'\.\(\)&]/)) {
                     console.log(`addNameAttribute: skipped ${src}`);
                     skipped.push(id + ' (&lt;h' + lv + '&gt;)');
