@@ -94,7 +94,7 @@
                     return src;
                 } else {
                     processed++;
-                    return `<h${lv} ${other}id="${id}" name="${id}">`;
+                    return `<h${lv} ${other || ''}id="${id}" name="${id}">`;
                 }
             });
             if (skipped.length) {
