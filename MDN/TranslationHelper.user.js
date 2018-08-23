@@ -3,7 +3,7 @@
 // @description MDNで翻訳を行う際に自動で色々します。
 // @namespace   https://github.com/mozilla-japan/translation/
 // @author      unarist
-// @version     0.4.7
+// @version     0.4.8
 // @downloadURL https://raw.githubusercontent.com/mozilla-japan/translation/master/MDN/TranslationHelper.user.js
 // @supportURL  https://github.com/mozilla-japan/translation/issues
 // @match       https://developer.mozilla.org/en-US/docs/*
@@ -52,6 +52,9 @@
 0.4.7 (2018/8/22)
  "初期化"を実行した際に前後に余分な空白がついていたバグを修正
  本文のない見出し（ライブサンプル等）でname属性追加が機能していなかったのを修正 (mozilla-translations-ja 668)
+
+0.4.8 (2018/8/23)
+ name属性追加処理でゴミが入ることがあるのを修正 (0.4.7でのデグレ)
 
 */
 
