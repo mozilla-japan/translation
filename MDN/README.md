@@ -49,6 +49,6 @@ MDNで翻訳画面や日本語記事の編集画面を開くと自動で作動�
 
 ## 何かあれば
 
-Issues か ML へ。単刀直入に PullRequest でも。
+[Issues](https://github.com/mozilla-japan/translation/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc) か [ML](https://groups.google.com/forum/#!forum/mozilla-translations-ja) へ。単刀直入に PullRequest でも。
 
 言い出しっぺは @unarist です。
