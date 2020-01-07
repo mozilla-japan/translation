@@ -3,7 +3,7 @@
 // @description MDNで翻訳を行う際に自動で色々します。
 // @namespace   https://github.com/mozilla-japan/translation/
 // @author      unarist
-// @version     0.4.8
+// @version     0.4.9
 // @downloadURL https://raw.githubusercontent.com/mozilla-japan/translation/master/MDN/TranslationHelper.user.js
 // @supportURL  https://github.com/mozilla-japan/translation/issues
 // @match       https://developer.mozilla.org/en-US/docs/*
@@ -61,6 +61,9 @@
 
 0.4.8 (2018/8/23)
  name属性追加処理でゴミが入ることがあるのを修正 (0.4.7でのデグレ)
+
+0.4.9 (2020/1/7)
+ 編集URLが追加されたの対応(#464)
 
 */
 
