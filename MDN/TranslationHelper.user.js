@@ -3,7 +3,7 @@
 // @description MDNで翻訳を行う際に自動で色々します。
 // @namespace   https://github.com/mozilla-japan/translation/
 // @author      unarist
-// @version     0.4.5
+// @version     0.4.8
 // @downloadURL https://raw.githubusercontent.com/mozilla-japan/translation/master/MDN/TranslationHelper.user.js
 // @supportURL  https://github.com/mozilla-japan/translation/issues
 // @match       https://developer.mozilla.org/en-US/docs/*
@@ -45,8 +45,16 @@
 0.4.5 (2018/05/03)
  長音処理の追加、新規翻訳時の長音処理キャンセル(#266 #277)
 
-0.4.6 (2018/05/08)
-マクロ内のURL変換で「"」が消えるバグ修正(#278)
+0.4.6 (2018/08/15)
+ リンクURL変換時に"が消えていたバグを修正
+ 見出し翻訳エントリの追加
+
+0.4.7 (2018/8/22)
+ "初期化"を実行した際に前後に余分な空白がついていたバグを修正
+ 本文のない見出し（ライブサンプル等）でname属性追加が機能していなかったのを修正 (mozilla-translations-ja 668)
+
+0.4.8 (2018/8/23)
+ name属性追加処理でゴミが入ることがあるのを修正 (0.4.7でのデグレ)
 
 */
 
@@ -57,7 +65,7 @@
 
     class BodyProcessor {
         constructor() {
-            this.src_str = document.querySelector('.translate-source').textContent;
+            this.src_str = document.querySelector('.translate-source > textarea').textContent;
             this.editor = CKEDITOR.instances[Object.keys(CKEDITOR.instances)[0]];
             this.dest_str = this.editor.getData();
             this.work_str = this.dest_str;
@@ -82,14 +90,14 @@
             //this.work_str = this.work_str.replace(/<h(\d) id="(\w+)">/g, '<h$1 id="$2" name="$2">');
             let processed = 0;
             let skipped = [];
-            this.work_str = this.work_str.replace(/<h(\d) ([^ ]* *)id="([^"]+)">/g, (src, lv, other, id) => {
+            this.work_str = this.work_str.replace(/<h(\d) ([^ >]* +)?id="([^"]+)">/g, (src, lv, other, id) => {
                 if (id.match(/[^A-Za-z0-9_\-–;'\.\(\)&]/)) {
                     console.log(`addNameAttribute: skipped ${src}`);
                     skipped.push(id + ' (&lt;h' + lv + '&gt;)');
                     return src;
                 } else {
                     processed++;
-                    return `<h${lv} ${other}id="${id}" name="${id}">`;
+                    return `<h${lv} ${other || ''}id="${id}" name="${id}">`;
                 }
             });
             if (skipped.length) {
@@ -144,6 +152,7 @@
                 ['h2', 'Syntax', '構文'],
                 ['h3', 'Parameters', 'パラメーター'],
                 ['h3', 'Constants', '定数'],
+                ['h3', 'Exceptions', '例外'],
                 // DOM Elements
                 ['h3', 'Event handlers', 'イベントハンドラー'],
                 // Learning Area
@@ -316,7 +325,7 @@
             // title: 記事URLを日本語版に修正
             // desc: /en-US/docs/ を /ja/docs/ などに置き換えます。
             const newStr = this.work_str.replace(/"\/en-US\//g, '"/ja/')
-            .replace(/"\/ja\/\//g, '"/ja/')  // パッチ処理(#276)
+            .replace(/"\/ja\/\//g, '"/ja/')
             // .replace(/"\/en-US\/Add-ons\//g, '/ja/Add-ons/')
             // .replace(/"\/en-US\/Apps\//g, '/ja/Apps/')
             .replace(/developer\.mozilla\.org\/en-US\//g, 'developer.mozilla.org/ja/');
