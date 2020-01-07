@@ -12,6 +12,12 @@
 // @match       https://developer.mozilla.org/ja/docs/*
 // @match       https://developer.mozilla.org/ja/Add-ons/*
 // @match       https://developer.mozilla.org/ja/Apps/*
+// @match       https://wiki.developer.mozilla.org/en-US/docs/*
+// @match       https://wiki.developer.mozilla.org/en-US/Add-ons/*
+// @match       https://wiki.developer.mozilla.org/en-US/Apps/*
+// @match       https://wiki.developer.mozilla.org/ja/docs/*
+// @match       https://wiki.developer.mozilla.org/ja/Add-ons/*
+// @match       https://wiki.developer.mozilla.org/ja/Apps/*
 // ==/UserScript==
 
 // 機能プランについてはGithubのプロジェクトに移動した
