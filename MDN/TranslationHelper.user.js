@@ -122,9 +122,9 @@
             // TODO: URLを見て適用するルールを限定する？
             const patterns = [
                 // common
-                ['h2', 'Specifications', '仕様'],
-                ['strong', 'Note:', '注:'],
-                ['strong', 'Note', '注'],
+                ['h2', 'Specifications?', '仕様'],
+                ['strong', 'Note(\:?)', '注$2'],
+                ['strong', 'Warning(\:?)', '警告$2'],
                 ['h2', 'Examples?', '例'],
                 ['h2', 'Browser compatibility', 'ブラウザー実装状況'],
                 ['h2', 'Notes', '注記'],
@@ -152,9 +152,9 @@
                 ['th', 'Comment', 'コメント'],
                 ['td', 'Initial (definition|specification)\.?', '初期定義'],
                 // common - constant table
-                ['th', 'Value', '値'],
+                ['(?:th|h3)', 'Values?', '値'],
                 ['th', 'Associated constant', '定数'],
-                ['th', 'Description', '説明'],
+                ['(?:th|h[2-3])', 'Description', '説明'],
                 // JavaScript API
                 ['h2', 'Methods', 'メソッド'],
                 ['h2', 'Properties', 'プロパティ'],
@@ -162,6 +162,9 @@
                 ['h3', 'Parameters', 'パラメーター'],
                 ['h3', 'Constants', '定数'],
                 ['h3', 'Exceptions', '例外'],
+                ['h3', 'Return value', '戻り値'],
+                ['h3', 'Result', '結果'],
+                ['h3', 'Formal syntax', '形式的構文'],
                 // DOM Elements
                 ['h3', 'Event handlers', 'イベントハンドラー'],
                 // Learning Area
@@ -189,7 +192,12 @@
                 ['dt', 'Cancelable', 'キャンセル可能か'],
                 ['dt', 'Target', 'ターゲット'],
                 ['dt', 'Default Action', '既定の動作'],
-                ['dd', 'None', 'なし']
+                ['dd', 'None', 'なし'],
+                // /docs/Web/CSS/
+                ['h2', 'Accessibility concerns', 'アクセシビリティへの配慮'],
+                ['', '\\/\\* +&lt;(\\w+)&gt; values? +\\*\\/', '/* &lt;$1&gt; 値 */'],
+                ['', '\\/\\* +Keyword values? +\\*\\/', '/* キーワード値 */'],
+                ['', '\\/\\* +Global values? +\\*\\/', '/* グローバル値 */']
             ];
             for (const pattern of patterns)
                 if (pattern[0] === ''){
