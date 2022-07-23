@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 質問や議論など
+    url: https://github.com/mozilla-japan/translation/discussions
+    about: MDN や翻訳に関する質問や議論は Discussions をご利用ください
