@@ -2,7 +2,7 @@
 name: ページの新規翻訳
 about: まだ翻訳されていない英語ページを新規に日本語訳します (リクエストも歓迎です)
 title: "<翻訳対象ページ名> の翻訳"
-labels: mdn
+labels: MDN
 assignees: ''
 
 ---
