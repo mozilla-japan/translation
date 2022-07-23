@@ -2,7 +2,7 @@
 name: ページの更新 (誤訳の指摘もこちら)
 about: 既に日本語訳されているページを更新します (指摘や更新のリクエストもどうぞ)
 title: "<翻訳対象ページ名> の更新"
-labels: mdn
+labels: MDN
 assignees: ''
 
 ---
