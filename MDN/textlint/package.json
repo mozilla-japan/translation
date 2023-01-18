@@ -1,0 +1,21 @@
+{
+  "name": "mdn-textlint-ja",
+  "version": "0.9.0",
+  "description": "",
+  "scripts": {
+    "lint": "textlint"
+  },
+  "keywords": [],
+  "author": "mongolyy",
+  "license": "ISC",
+  "devDependencies": {
+    "textlint": "^12.1.0",
+    "textlint-plugin-html": "^0.3.0",
+    "textlint-rule-ja-space-between-half-and-full-width": "^2.2.0",
+    "textlint-rule-preset-ja-technical-writing": "^7.0.0",
+    "textlint-rule-prh": "^5.3.0"
+  },
+  "resolutions": {
+    "trim": "0.0.3"
+  }
+}
