@@ -18,7 +18,7 @@ Mozilla の日本語翻訳コミュニティでは、このリポジトリの [i
 ## コミュニティイベントについて
 
 MDN 翻訳コミュニティでは毎月定例でミートアップイベントを開催しています。
-[Mozilla Japan コミュニティの Doorkeeper](https://manage.doorkeeper.jp/groups/mozilla/) を確認し、気軽にご参加ください。
+[Mozilla Japan コミュニティの Doorkeeper](https://mozilla.doorkeeper.jp/) を確認し、気軽にご参加ください。
 
 初めての方向けの説明やご案内などもしています、翻訳未経験者の方も歓迎です！遠慮無く是非どうぞ！
 
