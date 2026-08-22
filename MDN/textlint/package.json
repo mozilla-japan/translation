@@ -16,6 +16,7 @@
     "textlint-rule-prh": "^6.1.0"
   },
   "resolutions": {
+    "trim": "0.0.3",
     "**/prh/js-yaml": "3.15.1"
   }
 }
