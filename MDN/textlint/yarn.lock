@@ -1532,10 +1532,10 @@ js-tokens@^4.0.0:
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
   integrity sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==
 
-js-yaml@^3.9.1:
-  version "3.14.2"
-  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.14.2.tgz#77485ce1dd7f33c061fd1b16ecea23b55fcb04b0"
-  integrity sha512-PMSmkqxr106Xa156c2M265Z+FTrPl+oxd/rgOQy2tijQeK5TxQ43psO1ZCwhVOSdnn+RzkzlRz/eY4BgJBYVpg==
+js-yaml@3.15.1, js-yaml@^3.9.1:
+  version "3.15.1"
+  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.15.1.tgz#24bc95028f361cdaaa84745b06a109c4486773c0"
+  integrity sha512-S99WuO3HlhO3XN41EtYUNl9zzXjoJx7QvmipxsJVxtCBT0YHEFy+iOJhjSvrmV12nYhWpZaM8lPHkJm0yUMbag==
   dependencies:
     argparse "^1.0.7"
     esprima "^4.0.0"
@@ -2792,11 +2792,6 @@ traverse@^0.6.7:
     gopd "^1.2.0"
     typedarray.prototype.slice "^1.0.5"
     which-typed-array "^1.1.18"
-
-trim@0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/trim/-/trim-0.0.3.tgz#05243a47a3a4113e6b49367880a9cca59697a20b"
-  integrity sha512-h82ywcYhHK7veeelXrCScdH7HkWfbIT1D/CgYO+nmDarz3SGNssVBMws6jU16Ga60AJCRAvPV6w6RLuNerQqjg==
 
 trough@^1.0.0:
   version "1.0.5"
