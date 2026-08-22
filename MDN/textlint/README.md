@@ -2,6 +2,10 @@
 
 mdnのtranslated-contentの日本語翻訳向けのlintツール
 
+## Requirements
+
+- Node.js 20 以上（textlint v15 の要件）。
+
 ## Setup
 
 依存パッケージをインストール
